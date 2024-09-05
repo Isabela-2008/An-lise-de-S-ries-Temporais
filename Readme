@@ -1,0 +1,52 @@
+Enunciado do Projeto
+Título: Previsão de Preços das Ações do Walmart
+
+Descrição: Neste projeto, você realizará uma análise de séries temporais dos preços das ações do Walmart para identificar padrões e tendências ao longo do tempo. Utilizando dados históricos dos preços de fechamento das ações, você construirá um modelo de previsão para estimar os preços futuros das ações. O modelo será ajustado usando o ARIMA (AutoRegressive Integrated Moving Average), uma técnica clássica de análise de séries temporais.
+
+Objetivos:
+
+Carregar e Pré-processar os Dados:
+
+Carregar o conjunto de dados de um arquivo CSV hospedado no Google Drive.
+Garantir que os dados estejam em um formato de série temporal com uma frequência diária e preencher dados ausentes se necessário.
+Visualizar os Dados:
+
+Criar gráficos para visualizar os preços históricos das ações e suas previsões.
+Construir e Ajustar o Modelo ARIMA:
+
+Dividir os dados em conjuntos de treino e teste.
+Ajustar um modelo ARIMA para os dados de treino.
+Fazer previsões usando o modelo ajustado e comparar com os dados reais.
+Avaliar o Modelo:
+
+Calcular o Erro Quadrático Médio (MSE) para avaliar a precisão das previsões.
+Visualizar as previsões comparadas com os dados reais.
+Requisitos:
+
+Python 3.x
+Bibliotecas: pandas, numpy, matplotlib, statsmodels, sklearn, requests
+
+# Previsão de Preços das Ações do Walmart
+
+## Descrição
+
+Neste projeto, realizamos uma análise de séries temporais dos preços das ações do Walmart para identificar padrões e tendências ao longo do tempo. Utilizamos o modelo ARIMA (AutoRegressive Integrated Moving Average) para prever os preços futuros das ações com base em dados históricos.
+
+## Objetivos
+
+1. **Carregar e Pré-processar os Dados**
+2. **Visualizar os Dados**
+3. **Construir e Ajustar o Modelo ARIMA**
+4. **Avaliar o Modelo**
+
+## Requisitos
+
+- Python 3.x
+- Bibliotecas: `pandas`, `numpy`, `matplotlib`, `statsmodels`, `sklearn`, `requests`
+
+## Instalação
+
+Para instalar as bibliotecas necessárias, execute:
+
+```bash
+pip install pandas numpy matplotlib statsmodels scikit-learn requests
