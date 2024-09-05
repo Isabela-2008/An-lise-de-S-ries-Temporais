@@ -1,0 +1,76 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_squared_error
+import requests
+from io import StringIO
+
+# Função para carregar o arquivo CSV do Google Drive
+def load_data_from_google_drive(file_id):
+    url = f"https://drive.google.com/uc?id={file_id}"
+    response = requests.get(url)
+    data = response.text
+    return pd.read_csv(StringIO(data))
+
+# ID do arquivo Google Drive
+file_id = '1oaMwWa9XtdXx2Mq7iUf_5yjAnOySfhRb'
+
+# Carregar os dados
+data = load_data_from_google_drive(file_id)
+
+# Verificar as primeiras linhas do dataset
+print(data.head())
+
+# Assumindo que o dataset tem uma coluna 'Date' e uma coluna 'Close'
+data['Date'] = pd.to_datetime(data['Date'])
+data.set_index('Date', inplace=True)
+data = data[['Close']]
+
+# Verificar se há datas faltantes no índice e preencher se necessário
+data = data.asfreq('D', fill_value=np.nan)
+
+# Visualizar os dados
+plt.figure(figsize=(10, 6))
+plt.plot(data, label='Preço de Fechamento')
+plt.title('Preço de Fechamento das Ações do Walmart')
+plt.xlabel('Data')
+plt.ylabel('Preço de Fechamento')
+plt.legend()
+plt.show()
+
+# Dividir os dados em treino e teste
+train_size = int(len(data) * 0.8)
+train, test = data[:train_size], data[train_size:]
+
+# Ajustar o modelo ARIMA
+model = ARIMA(train, order=(5, 1, 0))  # Ajustar os parâmetros (p, d, q) conforme necessário
+model_fit = model.fit()
+
+# Fazer previsões
+forecast = model_fit.forecast(steps=len(test))
+
+# Adicionar previsões ao DataFrame de teste
+test = test.copy()  # Garantir que estamos trabalhando com uma cópia do DataFrame
+test.loc[test.index[-len(forecast):], 'Forecast'] = forecast.values
+
+# Remover linhas com valores NaN em 'Close' ou 'Forecast'
+test = test.dropna(subset=['Close', 'Forecast'])
+
+# Visualizar previsões
+plt.figure(figsize=(10, 6))
+plt.plot(train, label='Treinamento')
+plt.plot(test['Close'], label='Real')
+plt.plot(test['Forecast'], label='Previsto', color='red')
+plt.title('Previsão do Preço de Fechamento das Ações do Walmart')
+plt.xlabel('Data')
+plt.ylabel('Preço de Fechamento')
+plt.legend()
+plt.show()
+
+# Calcular o erro quadrático médio
+if not test[['Close', 'Forecast']].isnull().values.any():
+    mse = mean_squared_error(test['Close'], test['Forecast'])
+    print(f'Erro Quadrático Médio: {mse}')
+else:
+    print("Não é possível calcular o MSE devido a valores nulos nas previsões ou nos dados reais.")
